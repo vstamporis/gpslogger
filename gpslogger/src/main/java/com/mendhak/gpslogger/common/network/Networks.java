@@ -21,6 +21,7 @@ package com.mendhak.gpslogger.common.network;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import com.mendhak.gpslogger.R;
 import com.mendhak.gpslogger.common.slf4j.Logs;
@@ -115,13 +116,17 @@ public class Networks {
     public static SSLSocketFactory getSocketFactory(Context context){
         try {
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            LocalX509TrustManager atm = null;
-
-            atm = new LocalX509TrustManager(getKnownServersStore(context));
-
+            LocalX509TrustManager atm = new LocalX509TrustManager(getKnownServersStore(context));
             TrustManager[] tms = new TrustManager[] { atm };
-            sslContext.init(null, tms, null);
-            return sslContext.getSocketFactory();
+
+            if (Build.VERSION.SDK_INT >= 16 && Build.VERSION.SDK_INT < 22){
+                return new PreLollipopTLSSocketFactory(tms);
+            }
+            else {
+                sslContext.init(null, tms, null);
+                return sslContext.getSocketFactory();
+            }
+
         } catch (Exception e) {
             LOG.error("Could not get SSL Socket factory ", e);
         }
