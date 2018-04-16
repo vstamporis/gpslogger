@@ -21,6 +21,7 @@ package com.mendhak.gpslogger.loggers.customurl;
 
 
 import com.mendhak.gpslogger.common.AppSettings;
+import com.mendhak.gpslogger.common.network.LocalX509TrustManager;
 import com.mendhak.gpslogger.common.network.Networks;
 import com.mendhak.gpslogger.common.Strings;
 import com.mendhak.gpslogger.common.events.UploadEvents;
@@ -59,7 +60,8 @@ public class CustomUrlJob extends Job {
         LOG.info("HTTP Request - " + urlRequest.getLogURL());
 
         OkHttpClient.Builder okBuilder = new OkHttpClient.Builder();
-        okBuilder.sslSocketFactory(Networks.getSocketFactory(AppSettings.getInstance()), Networks.getTrustManager(AppSettings.getInstance()));
+        okBuilder.sslSocketFactory(Networks.getSocketFactory(AppSettings.getInstance()), (LocalX509TrustManager)Networks.getTrustManager(AppSettings.getInstance()));
+
         Request.Builder requestBuilder = new Request.Builder().url(urlRequest.getLogURL());
 
         for(Map.Entry<String,String> header : urlRequest.getHttpHeaders().entrySet()){
