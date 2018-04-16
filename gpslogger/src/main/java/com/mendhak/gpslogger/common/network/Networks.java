@@ -141,7 +141,7 @@ public class Networks {
     }
 
 
-    public static TrustManager getTrustManager(Context context)
+    public static X509TrustManager getTrustManager(Context context)
             throws CertificateException, NoSuchAlgorithmException, KeyStoreException, IOException, CertStoreException {
         return new LocalX509TrustManager(getKnownServersStore(context));
     }
