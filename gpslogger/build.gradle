@@ -47,7 +47,7 @@ android {
     defaultConfig {
         applicationId project.APP_ID
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 28
 
         versionCode project.APP_VERSION_CODE
         versionName project.APP_VERSION_NAME
@@ -364,13 +364,13 @@ task copyFinalAPK(group:'build') {
         //Verify with gpg --verify ~/Downloads/gpslogger-71.apk.asc
     if(file(finalApkName).isFile()){
         signing {
+            useGpgCmd()
             sign file(finalApkName)
         }
 
         //SHA256 Checksum
         //Verify with sha256sum -c ~/Downloads/gpslogger-71.apk.SHA256
-        ant.checksum(file: finalApkName, algorithm: "SHA256", pattern: "{0} {1}")
-    }
+        ant.checksum(file: finalApkName, fileext: '.SHA256', algorithm: "SHA-256", pattern: "{0} {1}")    }
 
 }
 

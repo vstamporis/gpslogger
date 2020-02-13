@@ -21,6 +21,7 @@
     <!-- If the user needs to use external GPS receiver eg over bluetooth -->
     <uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION"
                      tools:ignore="MockLocation"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
         android:allowBackup="true"
