@@ -75,6 +75,7 @@ import org.slf4j.Logger;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 public class GpsMainActivity extends AppCompatActivity
@@ -190,6 +191,11 @@ public class GpsMainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
+        try {
+            Class<?> emmaRTClass = Class.forName("com.vladium.emma.rt.RT");
+            Method dumpCoverageMethod = emmaRTClass.getMethod("dumpCoverageData", File.class, boolean.class, boolean.class);
+            dumpCoverageMethod.invoke(null, new File("sdcard/coverage.exec"), true, false);
+        } catch (Exception e) {}
         stopAndUnbindServiceIfRequired();
         unregisterEventBus();
         super.onDestroy();
