@@ -28,6 +28,8 @@ project.ext.set("GHACTIONS_FOLDING", true)
 //Generate help pages
 apply plugin: 'com.moowork.node'
 
+apply plugin: 'gr.aueb.android.barista-plugin'
+
 repositories {
     mavenCentral()
 
