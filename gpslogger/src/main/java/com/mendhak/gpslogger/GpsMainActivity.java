@@ -20,6 +20,7 @@
 package com.mendhak.gpslogger;
 
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.*;
@@ -31,6 +32,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.*;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.DrawerLayout;
@@ -93,9 +96,16 @@ public class GpsMainActivity extends AppCompatActivity
     private PreferenceHelper preferenceHelper = PreferenceHelper.getInstance();
     private Session session = Session.getInstance();
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    1);
+        }
 
         loadPresetProperties();
         loadVersionSpecificProperties();
@@ -184,6 +194,15 @@ public class GpsMainActivity extends AppCompatActivity
 
     protected void onStop() {
         super.onStop();
+
+        if (BuildConfig.DEBUG) {
+            try {
+                Class<?> emmaRTClass = Class.forName("com.vladium.emma.rt.RT");
+                Method dumpCoverageMethod = emmaRTClass.getMethod("dumpCoverageData", File.class, boolean.class, boolean.class);
+                dumpCoverageMethod.invoke(null, new File("sdcard/coverage.exec"), true, false);
+            } catch (Exception e) {}
+        }
+
         if (!isFinishing()) {
             stopAndUnbindServiceIfRequired();
         }
@@ -191,11 +210,6 @@ public class GpsMainActivity extends AppCompatActivity
 
     @Override
     protected void onDestroy() {
-        try {
-            Class<?> emmaRTClass = Class.forName("com.vladium.emma.rt.RT");
-            Method dumpCoverageMethod = emmaRTClass.getMethod("dumpCoverageData", File.class, boolean.class, boolean.class);
-            dumpCoverageMethod.invoke(null, new File("sdcard/coverage.exec"), true, false);
-        } catch (Exception e) {}
         stopAndUnbindServiceIfRequired();
         unregisterEventBus();
         super.onDestroy();
