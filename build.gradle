@@ -6,10 +6,12 @@ buildscript {
         google()
         mavenCentral()
         jcenter()
+        mavenLocal()
     }
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.4.2'
+        classpath 'gr.aueb.android:barista-plugin:1.0.3-alpha'
     }
 }
 
