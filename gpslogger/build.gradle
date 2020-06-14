@@ -30,6 +30,8 @@ apply plugin: 'com.moowork.node'
 
 apply plugin: 'gr.aueb.android.barista-plugin'
 
+apply plugin: 'jacoco'
+
 repositories {
     mavenCentral()
 
@@ -72,6 +74,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
             useProguard true
             debuggable true
+            testCoverageEnabled true
         }
         release {
             minifyEnabled true
@@ -387,3 +390,26 @@ task deleteReleaseAPKs(group:"build", type:Delete){
 }
 
 clean.dependsOn deleteReleaseAPKs
+
+task jacocoTestReport(type: JacocoReport) {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    def fileFilter = ['**/R.class',
+                      '**/R$*.class',
+                      '**/BuildConfig.*',
+                      '**/Manifest*.*',
+                      '**/*Test*.*',
+                      'android/**/*.*',
+                      '**/data/models/*']
+    def debugTree = fileTree(dir: "${buildDir}/intermediates/javac/debug", excludes: fileFilter)
+    def mainSrc = "${project.projectDir}/src/main/java"
+
+    sourceDirectories = files([mainSrc])
+    classDirectories = files([debugTree])
+    executionData = fileTree(dir: "$project.rootDir", includes: [
+            "coverage.exec"
+    ])
+}
