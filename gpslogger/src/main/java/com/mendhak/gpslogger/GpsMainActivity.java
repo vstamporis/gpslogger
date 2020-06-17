@@ -199,7 +199,7 @@ public class GpsMainActivity extends AppCompatActivity
             try {
                 Class<?> emmaRTClass = Class.forName("com.vladium.emma.rt.RT");
                 Method dumpCoverageMethod = emmaRTClass.getMethod("dumpCoverageData", File.class, boolean.class, boolean.class);
-                dumpCoverageMethod.invoke(null, new File("sdcard/coverage.exec"), true, false);
+                dumpCoverageMethod.invoke(null, new File("sdcard/coverage.exec"), false, false);
             } catch (Exception e) {}
         }
 
