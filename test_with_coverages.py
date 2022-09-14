@@ -10,15 +10,15 @@ config3 = "configs/fuzzer3.properties"
 
 jacocoReport = "gradlew.bat jacocoTestReport"
 
-command1_monkey = "gradlew.bat clean startMonkey --events=\"2500\" --throttle=\"200\" --epochs=\"3\" --config=\"" + config1 + "\""
+command1_monkey = "gradlew.bat clean startMonkey --events=\"2500\" --throttle=\"200\" --epochs=\"30\" --config=\"" + config1 + "\""
 command2_monkey = "gradlew.bat clean startMonkey --events=\"2500\" --throttle=\"200\" --epochs=\"3\" --config=\"" + config2 + "\""
 command3_monkey = "gradlew.bat clean startMonkey --events=\"2500\" --throttle=\"200\" --epochs=\"3\" --config=\"" + config3 + "\""
 
-command1 = "gradlew.bat clean startBaristaFuzzer --events=\"2500\" --throttle=\"200\" --epochs=\"3\" --config=\"" + config1 + "\""
+command1 = "gradlew.bat clean startBaristaFuzzer --events=\"2500\" --throttle=\"200\" --epochs=\"30\" --config=\"" + config1 + "\""
 command2 = "gradlew.bat clean startBaristaFuzzer --events=\"2500\" --throttle=\"200\" --epochs=\"3\" --config=\"" + config2 + "\""
 command3 = "gradlew.bat clean startBaristaFuzzer --events=\"2500\" --throttle=\"200\" --epochs=\"3\" --config=\"" + config3 + "\""
 
-commands = [command1, command1_monkey, command2, command2_monkey, command3, command3_monkey]
+commands = [command1_monkey]
 
 logfile = open("logfile.log", "w")
 
@@ -32,7 +32,7 @@ if not (os.path.isdir('reports')):
 pathToCopy = os.getcwd() + '/reports'
 #print(pathToCopy)
 
-t = 1
+t = 2
 
 for y in commands:
     #p = subprocess.Popen(installDebug, shell=True, universal_newlines=True, stdout=logfile)
